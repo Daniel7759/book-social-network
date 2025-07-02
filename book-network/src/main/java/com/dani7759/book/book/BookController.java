@@ -10,6 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("books")
 @RequiredArgsConstructor
@@ -115,8 +117,16 @@ public class BookController {
             @Parameter()
             @RequestPart("file") MultipartFile file,
             Authentication connectedUser
-    ) {
+    ) throws IOException {
         service.uploadBookCoverPicture(file, connectedUser, bookId);
         return ResponseEntity.accepted().build();
+    }
+
+    @GetMapping("/everyone")
+    public ResponseEntity<PageResponse<BookResponse>> findEveryoneBook(
+            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(name = "size", defaultValue = "10", required = false) int size
+    ){
+        return ResponseEntity.ok(service.findEveryoneBook(page, size));
     }
 }
