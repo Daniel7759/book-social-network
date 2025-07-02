@@ -12,6 +12,7 @@ public class BookMapper {
                 .id(request.id())
                 .title(request.tittle())
                 .authorName(request.authorName())
+                .isbn(request.isbn())
                 .synopsis(request.synopsis())
                 .archived(false)
                 .shareable(request.shareable())
@@ -29,7 +30,7 @@ public class BookMapper {
                 .archived(book.isArchived())
                 .shareable(book.isShareable())
                 .owner(book.getOwner().fullName())
-                .cover(FileUtils.readFileFromLocation(book.getBookCover()))
+                .cover(book.getBookCover())
                 .build();
     }
 
