@@ -1,6 +1,7 @@
 package com.dani7759.book.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -17,6 +18,7 @@ import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static org.springframework.http.HttpHeaders.*;
 
@@ -25,6 +27,8 @@ import static org.springframework.http.HttpHeaders.*;
 public class BeansConfig {
 
     private final UserDetailsService userDetailsService;
+    @Value("${application.cors.origins:*}")
+    private List<String> allowedOrigins;
 
     @Bean
     public AuthenticationProvider authenticationProvider(){
@@ -53,21 +57,10 @@ public class BeansConfig {
     public CorsFilter corsFilter() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         final CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
-        config.setAllowedHeaders(Arrays.asList(
-                ORIGIN,
-                CONTENT_TYPE,
-                ACCEPT,
-                AUTHORIZATION
-        ));
-        config.setAllowedMethods(Arrays.asList(
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT",
-                "PATCH"
-        ));
+        //config.setAllowCredentials(true);
+        config.setAllowedOrigins(allowedOrigins);
+        config.setAllowedHeaders(Arrays.asList("*")); //not recommended for production
+        config.setAllowedMethods(Arrays.asList("*")); //not recommended for production
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
