@@ -1,7 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://aws-0-us-east-2.pooler.supabase.com:5432/postgres?user=postgres.lqamfnkcnbqkbqldnyly&password=7AyS2puWbTd8iRz8
-
+    url: ${DATABASE_URL}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -13,10 +12,10 @@ spring:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   mail:
-    host: smtp.gmail.com
-    port: 587
-    username: danieljh7759@gmail.com
-    password: bljyyfswyfhjsiia
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:
@@ -32,7 +31,7 @@ application:
       expiration: 864000000
   mailing:
     frontend:
-      activation-url: http://localhost:4200/activate-account
+      activation-url: ${MAILING_FRONTEND_ACTIVATION_URL}
   cors:
     origins: http://localhost:4200,http://localhost:8080,
   file:
