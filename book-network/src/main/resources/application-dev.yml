@@ -1,8 +1,7 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/book_social_network
-    username: username
-    password: password
+    url: jdbc:postgresql://aws-0-us-east-2.pooler.supabase.com:5432/postgres?user=postgres.lqamfnkcnbqkbqldnyly&password=7AyS2puWbTd8iRz8
+
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -14,20 +13,17 @@ spring:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   mail:
-    host: localhost
-    port: 1025
-    username: dani7759
-    password: dani7759
+    host: smtp.gmail.com
+    port: 587
+    username: danieljh7759@gmail.com
+    password: bljyyfswyfhjsiia
     properties:
       mail:
         smtp:
-          trust: "*"
-        auth: true
-        starttls:
-          enable: true
-        connectiontimeout: 5000
-        timeout: 3000
-        write-timeout: 5000
+          auth: true
+          starttls:
+            enable: true
+    protocol: smtp
 
 application:
   security:
@@ -37,6 +33,8 @@ application:
   mailing:
     frontend:
       activation-url: http://localhost:4200/activate-account
+  cors:
+    origins: http://localhost:4200,http://localhost:8080,
   file:
     upload:
       photos-output-path: ./uploads
