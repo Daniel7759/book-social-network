@@ -13,7 +13,7 @@ public record BookRequest(
         String authorName,
         @NotNull(message = "102")
         @NotEmpty(message = "102")
-        String ibsn,
+        String isbn,
         @NotNull(message = "103")
         @NotEmpty(message = "103")
         String synopsis,
