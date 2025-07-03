@@ -27,7 +27,6 @@ export const routes: Routes = [
     path: 'book/:id',
     loadComponent: () => import('./pages/book-detail/book-detail').then(m => m.BookDetailComponent),
     // SIN canActivate - página pública, pero algunas funciones requieren auth
-    data: { renderMode: 'no-preference'}
   },
   {
     path: 'my-books',
