@@ -10,14 +10,14 @@ import { RegistrationRequest } from '../../services/models/registration-request'
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './register.html',
-  styleUrl: './register.css'
+  styleUrl: './register.scss'
 })
 export class RegisterComponent {
   registerForm: FormGroup;
   isLoading = false;
   errorMessage = '';
   successMessage = '';
-  
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthenticationService,
@@ -36,7 +36,7 @@ export class RegisterComponent {
       this.isLoading = true;
       this.errorMessage = '';
       this.successMessage = '';
-      
+
       const registerRequest: RegistrationRequest = {
         firstname: this.registerForm.get('firstname')?.value,
         lastname: this.registerForm.get('lastname')?.value,
@@ -51,7 +51,7 @@ export class RegisterComponent {
           this.isLoading = false;
           this.successMessage = 'Registro exitoso! Te hemos enviado un código de activación a tu email.';
           console.log('Registro exitoso:', response);
-          
+
           // Redirigir a la página de activación después de 3 segundos
           setTimeout(() => {
             this.router.navigate(['/activate-account']);
@@ -60,7 +60,7 @@ export class RegisterComponent {
         error: (error: any) => {
           this.isLoading = false;
           console.error('Error en registro:', error);
-          
+
           // Manejo de diferentes tipos de errores
           if (error.status === 400) {
             if (error.error?.message?.includes('email')) {

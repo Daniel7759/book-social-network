@@ -9,7 +9,7 @@ import { BookService } from '../../services/services/book.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './book-edit-modal.html',
-  styleUrl: './book-edit-modal.css'
+  styleUrl: './book-edit-modal.scss'
 })
 export class BookEditModalComponent implements OnInit {
   @Input() book!: BookResponse;
@@ -112,7 +112,7 @@ export class BookEditModalComponent implements OnInit {
     this.selectedFile = null;
     this.previewUrl = this.book?.cover || null;
     this.error = null;
-    
+
     // Limpiar el input file
     const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
     if (fileInput) {

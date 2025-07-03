@@ -15,7 +15,7 @@ import { BookAddModalComponent } from '../../components/book-add-modal/book-add-
   standalone: true,
   imports: [CommonModule, FormsModule, BookCardComponent, BookEditModalComponent, BookAddModalComponent],
   templateUrl: './my-books.html',
-  styleUrl: './my-books.css'
+  styleUrl: './my-books.scss'
 })
 export class MyBooksComponent implements OnInit {
   books: BookResponse[] = [];
@@ -26,7 +26,7 @@ export class MyBooksComponent implements OnInit {
   pageSize = 12;
   totalPages = 0;
   totalElements = 0;
-  
+
   // Filters
   filterType: 'all' | 'available' | 'borrowed' | 'archived' = 'all';
   searchQuery = '';
@@ -90,7 +90,7 @@ export class MyBooksComponent implements OnInit {
     // Aplicar filtro de búsqueda
     if (this.searchQuery.trim()) {
       const query = this.searchQuery.toLowerCase().trim();
-      filtered = filtered.filter(book => 
+      filtered = filtered.filter(book =>
         book.title?.toLowerCase().includes(query) ||
         book.authorName?.toLowerCase().includes(query) ||
         book.isbn?.toLowerCase().includes(query)
@@ -119,7 +119,7 @@ export class MyBooksComponent implements OnInit {
     if (this.searchQuery.trim()) {
       return 'No se encontraron libros';
     }
-    
+
     switch (this.filterType) {
       case 'available':
         return 'No tienes libros disponibles';
@@ -136,7 +136,7 @@ export class MyBooksComponent implements OnInit {
     if (this.searchQuery.trim()) {
       return 'Intenta con otros términos de búsqueda';
     }
-    
+
     switch (this.filterType) {
       case 'available':
         return 'Marca algunos libros como compartibles para que aparezcan aquí';
@@ -164,7 +164,7 @@ export class MyBooksComponent implements OnInit {
     this.books.unshift(newBook); // Lo agregamos al inicio
     this.totalElements++;
     this.applyFilter(); // Reaplica los filtros
-    
+
     // Mostrar mensaje de éxito
     alert('¡Libro agregado exitosamente!');
   }
@@ -186,7 +186,7 @@ export class MyBooksComponent implements OnInit {
       this.books[index] = updatedBook;
       this.applyFilter(); // Reaplica los filtros
     }
-    
+
     // Mostrar mensaje de éxito
     alert('¡Portada actualizada exitosamente!');
   }
@@ -199,12 +199,12 @@ export class MyBooksComponent implements OnInit {
 
     const action = book.archived ? 'desarchivar' : 'archivar';
     const confirmMessage = `¿Estás seguro de que quieres ${action} "${book.title}"?`;
-    
+
     if (confirm(confirmMessage)) {
       // Por ahora solo simulamos la acción ya que el botón es solo visual
       console.log(`${action.charAt(0).toUpperCase() + action.slice(1)} libro:`, book);
       alert(`Funcionalidad de ${action} libro en desarrollo.\n\nEsto permitirá ${action} el libro "${book.title}" de tu biblioteca.\n\n¡Próximamente disponible!`);
-      
+
       // Cuando se implemente realmente, descomentar esto:
       /*
       this.bookService.updateArchivedStatus({ 'book-id': book.id }).subscribe({

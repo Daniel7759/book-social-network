@@ -7,7 +7,7 @@ import { AuthService } from '../../services/auth.service';
   selector: 'app-menu',
   imports: [CommonModule, RouterModule],
   templateUrl: './menu.html',
-  styleUrl: './menu.css'
+  styleUrl: './menu.scss'
 })
 export class Menu implements OnInit {
   isAuthenticated = false;
@@ -47,7 +47,7 @@ export class Menu implements OnInit {
   // Método para obtener las iniciales del usuario
   getUserInitials(): string {
     if (!this.userEmail) return 'U';
-    
+
     // Si hay un nombre completo, usar esas iniciales
     const userInfo = this.authService.getUserInfo();
     if (userInfo?.fullName) {
@@ -57,15 +57,15 @@ export class Menu implements OnInit {
       }
       return names[0][0].toUpperCase();
     }
-    
+
     // Si no hay nombre completo, usar el email
     const emailPart = this.userEmail.split('@')[0];
     const parts = emailPart.split(/[._-]/); // Dividir por puntos, guiones bajos o guiones
-    
+
     if (parts.length >= 2) {
       return (parts[0][0] + parts[1][0]).toUpperCase();
     }
-    
+
     return emailPart[0].toUpperCase();
   }
 

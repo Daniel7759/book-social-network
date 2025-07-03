@@ -13,7 +13,7 @@ import { PageResponseBookResponse } from '../../services/models/page-response-bo
   standalone: true,
   imports: [CommonModule, RouterModule, BookCardComponent],
   templateUrl: './home.html',
-  styleUrl: './home.css'
+  styleUrl: './home.scss'
 })
 export class HomeComponent implements OnInit, OnDestroy {
   books: BookResponse[] = [];
@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   pageSize = 12;
   totalPages = 0;
   totalElements = 0;
-  
+
   private authSubscription?: Subscription;
   isAuthStateInitialized = false;
   private currentAuthState = false;
@@ -38,9 +38,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     // Suscribirse al estado de autenticación para detectar cambios
     this.authSubscription = this.authService.isAuthenticated$.subscribe(isAuthenticated => {
       const authStateChanged = this.isAuthStateInitialized && this.currentAuthState !== isAuthenticated;
-      
+
       this.currentAuthState = isAuthenticated;
-      
+
       if (!this.isAuthStateInitialized) {
         // Primera inicialización: cargar libros después de determinar el estado
         this.isAuthStateInitialized = true;
@@ -64,7 +64,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.error = null;
 
     // Usar el estado de autenticación interno que ya está determinado
-    const bookRequest = this.currentAuthState 
+    const bookRequest = this.currentAuthState
       ? this.bookService.findAllBooks({
           page: this.currentPage,
           size: this.pageSize
@@ -85,7 +85,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         console.error('Error al cargar libros:', error);
         this.loading = false;
         this.books = [];
-        
+
         // Solo mostrar error real, no mensaje de autenticación
         // ya que ahora usamos endpoint público cuando no está autenticado
         this.error = 'Error al cargar los libros. Por favor, inténtalo de nuevo.';
@@ -128,13 +128,13 @@ export class HomeComponent implements OnInit, OnDestroy {
       error: (error) => {
         console.error('Error al pedir prestado el libro:', error);
         let errorMessage = 'Error al pedir prestado el libro.';
-        
+
         if (error.status === 400) {
           errorMessage = 'No puedes pedir prestado tu propio libro o el libro no está disponible.';
         } else if (error.status === 403) {
           errorMessage = 'No tienes permisos para realizar esta acción.';
         }
-        
+
         alert(errorMessage);
       }
     });
@@ -158,7 +158,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     // Por ahora mostrar un mensaje de confirmación
     // TODO: Implementar servicio de lista de espera
     alert(`"${book.title}" se agregará a tu lista de espera cuando esté disponible el servicio.`);
-    
+
     console.log('Agregando a lista de espera:', book.title);
   }
 

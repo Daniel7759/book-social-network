@@ -12,13 +12,13 @@ import { AuthenticationResponse } from '../../services/models/authentication-res
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.html',
-  styleUrl: './login.css'
+  styleUrl: './login.scss'
 })
 export class LoginComponent {
   loginForm: FormGroup;
   isLoading = false;
   errorMessage = '';
-  
+
   constructor(
     private fb: FormBuilder,
     private authenticationService: AuthenticationService,
@@ -35,7 +35,7 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.isLoading = true;
       this.errorMessage = '';
-      
+
       const loginRequest: AuthenticateRequest = {
         email: this.loginForm.get('email')?.value,
         password: this.loginForm.get('password')?.value
@@ -50,7 +50,7 @@ export class LoginComponent {
             // Guardar el token usando el servicio de autenticación
             this.authService.setToken(response.token);
             console.log('Login exitoso! Token guardado:', response.token);
-            
+
             // Redirigir a la página principal
             this.router.navigate(['/home']);
           } else {
@@ -60,7 +60,7 @@ export class LoginComponent {
         error: (error: any) => {
           this.isLoading = false;
           console.error('Error en login:', error);
-          
+
           // Manejo de diferentes tipos de errores
           if (error.status === 401) {
             this.errorMessage = 'Credenciales inválidas. Por favor, verifica tu email y contraseña.';

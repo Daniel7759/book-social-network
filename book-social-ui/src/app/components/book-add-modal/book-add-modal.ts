@@ -10,18 +10,18 @@ import { BookService } from '../../services/services/book.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './book-add-modal.html',
-  styleUrl: './book-add-modal.css'
+  styleUrl: './book-add-modal.scss'
 })
 export class BookAddModalComponent {
   @Input() set isOpen(value: boolean) {
     console.log('Modal isOpen cambió a:', value);
     this._isOpen = value;
   }
-  
+
   get isOpen(): boolean {
     return this._isOpen;
   }
-  
+
   private _isOpen = false;
 
   @Output() onClose = new EventEmitter<void>();
@@ -139,7 +139,7 @@ export class BookAddModalComponent {
     try {
       // 1. Crear el libro primero (devuelve el ID del libro)
       const bookId = await this.bookService.saveBook({ body: this.bookData }).toPromise();
-      
+
       if (!bookId) {
         throw new Error('Error al crear el libro');
       }
@@ -156,7 +156,7 @@ export class BookAddModalComponent {
 
       // 3. Obtener el libro completo con todos los datos
       const finalBook = await this.bookService.findBookById({ 'book-id': bookId }).toPromise();
-      
+
       if (!finalBook) {
         throw new Error('Error al obtener el libro creado');
       }

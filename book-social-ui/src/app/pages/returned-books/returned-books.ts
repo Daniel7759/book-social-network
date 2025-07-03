@@ -12,21 +12,21 @@ import { PageResponseBorrowedBookResponse } from '../../services/models/page-res
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './returned-books.html',
-  styleUrl: './returned-books.css'
+  styleUrl: './returned-books.scss'
 })
 export class ReturnedBooksComponent implements OnInit, OnDestroy {
   returnedBooks: BorrowedBookResponse[] = [];
   loading = false;
   error: string | null = null;
-  
+
   // Paginación
   currentPage = 0;
   pageSize = 12;
   totalPages = 0;
   totalElements = 0;
-  
+
   private subscriptions: Subscription[] = [];
-  
+
   // Hacer Math disponible en el template
   Math = Math;
 
@@ -41,7 +41,7 @@ export class ReturnedBooksComponent implements OnInit, OnDestroy {
       this.router.navigate(['/login']);
       return;
     }
-    
+
     this.loadReturnedBooks();
   }
 
@@ -67,7 +67,7 @@ export class ReturnedBooksComponent implements OnInit, OnDestroy {
         console.error('Error al cargar libros retornados:', error);
         this.loading = false;
         this.returnedBooks = [];
-        
+
         if (error.status === 401 || error.status === 403) {
           this.error = 'No tienes permisos para ver esta información.';
           this.router.navigate(['/login']);
@@ -148,39 +148,39 @@ export class ReturnedBooksComponent implements OnInit, OnDestroy {
       `¿Estás seguro de que quieres aprobar el retorno de "${book.title}"?\n\n` +
       `Una vez aprobado, el libro estará disponible para ser prestado nuevamente.`
     );
-    
+
     if (!confirmApproval) {
       return;
     }
 
     const originalTitle = book.title;
-    
+
     console.log('Aprobando retorno del libro:', {
       bookId: book.id,
       title: book.title,
       returned: book.returned,
       returnApproved: book.returnApproved
     });
-    
+
     const subscription = this.bookService.approveReturnBorrowBook({
       'book-id': book.id
     }).subscribe({
       next: (approvalId) => {
         console.log('Retorno aprobado exitosamente:', approvalId);
-        
+
         // Mostrar mensaje de éxito
         alert(
           `¡Retorno de "${originalTitle}" aprobado exitosamente!\n\n` +
           `El libro está ahora disponible para ser prestado nuevamente.`
         );
-        
+
         // Recargar la lista para actualizar el estado
         this.loadReturnedBooks();
       },
       error: (error) => {
         console.error('Error al aprobar el retorno:', error);
         let errorMessage = 'Error al aprobar el retorno.';
-        
+
         if (error.status === 400) {
           errorMessage = 'No puedes aprobar este retorno. Puede que ya haya sido procesado.';
         } else if (error.status === 403) {
@@ -190,7 +190,7 @@ export class ReturnedBooksComponent implements OnInit, OnDestroy {
         } else if (error.status === 500) {
           errorMessage = 'Error del servidor. Por favor, inténtalo de nuevo más tarde.';
         }
-        
+
         alert(`Error al aprobar retorno de "${originalTitle}": ${errorMessage}`);
       }
     });

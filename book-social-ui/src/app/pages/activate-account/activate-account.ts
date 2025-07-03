@@ -9,14 +9,14 @@ import { AuthenticationService } from '../../services/services/authentication.se
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './activate-account.html',
-  styleUrl: './activate-account.css'
+  styleUrl: './activate-account.scss'
 })
 export class ActivateAccountComponent {
   activationForm: FormGroup;
   isLoading = false;
   errorMessage = '';
   successMessage = '';
-  
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthenticationService,
@@ -32,7 +32,7 @@ export class ActivateAccountComponent {
       this.isLoading = true;
       this.errorMessage = '';
       this.successMessage = '';
-      
+
       const token = this.activationForm.get('token')?.value;
 
       this.authService.confirm({
@@ -42,7 +42,7 @@ export class ActivateAccountComponent {
           this.isLoading = false;
           this.successMessage = '¡Cuenta activada exitosamente! Serás redirigido al login en unos segundos.';
           console.log('Activación exitosa');
-          
+
           // Redirigir al login después de 3 segundos
           setTimeout(() => {
             this.router.navigate(['/login']);
@@ -51,7 +51,7 @@ export class ActivateAccountComponent {
         error: (error: any) => {
           this.isLoading = false;
           console.error('Error en activación:', error);
-          
+
           // Manejo de diferentes tipos de errores
           if (error.status === 400) {
             this.errorMessage = 'Código de activación inválido. Por favor, verifica el código ingresado.';

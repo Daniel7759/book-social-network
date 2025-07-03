@@ -7,7 +7,7 @@ import { BookResponse } from '../../services/models/book-response';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './book-card.html',
-  styleUrl: './book-card.css'
+  styleUrl: './book-card.scss'
 })
 export class BookCardComponent {
   @Input() book!: BookResponse;
@@ -30,16 +30,16 @@ export class BookCardComponent {
       if (this.book.cover.startsWith('http://') || this.book.cover.startsWith('https://')) {
         return this.book.cover;
       }
-      
+
       // Si ya tiene el prefijo data:image, la devolvemos tal como está
       if (this.book.cover.startsWith('data:image/')) {
         return this.book.cover;
       }
-      
+
       // Si es Base64 sin prefijo, agregamos el prefijo data:image/jpg;base64,
       return 'data:image/jpg;base64,' + this.book.cover;
     }
-    
+
     // Imagen por defecto si no hay portada
     return 'https://via.placeholder.com/200x280/6366f1/ffffff?text=No+Cover';
   }
@@ -148,7 +148,7 @@ export class BookCardComponent {
   onImageError(event: Event): void {
     const img = event.target as HTMLImageElement;
     console.warn('Error al cargar la imagen del libro:', this.book.title);
-    
+
     // Fallback a imagen por defecto
     img.src = 'https://via.placeholder.com/200x280/6366f1/ffffff?text=No+Cover';
     img.alt = `${this.book.title} - Sin portada`;

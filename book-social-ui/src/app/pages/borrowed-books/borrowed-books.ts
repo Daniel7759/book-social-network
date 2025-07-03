@@ -12,19 +12,19 @@ import { PageResponseBorrowedBookResponse } from '../../services/models/page-res
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './borrowed-books.html',
-  styleUrl: './borrowed-books.css'
+  styleUrl: './borrowed-books.scss'
 })
 export class BorrowedBooksComponent implements OnInit, OnDestroy {
   borrowedBooks: BorrowedBookResponse[] = [];
   loading = false;
   error: string | null = null;
-  
+
   // Paginación
   currentPage = 0;
   pageSize = 12;
   totalPages = 0;
   totalElements = 0;
-  
+
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -38,7 +38,7 @@ export class BorrowedBooksComponent implements OnInit, OnDestroy {
       this.router.navigate(['/login']);
       return;
     }
-    
+
     this.loadBorrowedBooks();
   }
 
@@ -64,7 +64,7 @@ export class BorrowedBooksComponent implements OnInit, OnDestroy {
         console.error('Error al cargar libros prestados:', error);
         this.loading = false;
         this.borrowedBooks = [];
-        
+
         if (error.status === 401 || error.status === 403) {
           this.error = 'No tienes permisos para ver esta información.';
           this.router.navigate(['/login']);
@@ -104,14 +104,14 @@ export class BorrowedBooksComponent implements OnInit, OnDestroy {
       `¿Estás seguro de que quieres retornar "${book.title}"?\n\n` +
       `Una vez que envíes la solicitud de retorno, estará pendiente de aprobación por el propietario del libro.`
     );
-    
+
     if (!confirmReturn) {
       return;
     }
 
     // Agregar estado de carga para este libro específico
     const originalTitle = book.title;
-    
+
     console.log('Intentando retornar libro:', {
       bookId: book.id,
       title: book.title,
@@ -119,27 +119,27 @@ export class BorrowedBooksComponent implements OnInit, OnDestroy {
       returnApproved: book.returnApproved,
       fullBookObject: book
     });
-    
+
     const subscription = this.bookService.returnBorrowBook({
       'book-id': book.id
     }).subscribe({
       next: (returnId) => {
         console.log('Libro retornado exitosamente:', returnId);
-        
+
         // Mostrar mensaje de éxito más informativo
         alert(
           `¡Libro "${originalTitle}" marcado para retorno exitosamente!\n\n` +
           `El retorno está ahora pendiente de aprobación por el propietario. ` +
           `Recibirás una notificación cuando sea aprobado.`
         );
-        
+
         // Recargar la lista para actualizar el estado
         this.loadBorrowedBooks();
       },
       error: (error) => {
         console.error('Error al retornar el libro:', error);
         let errorMessage = 'Error al retornar el libro.';
-        
+
         if (error.status === 400) {
           // Verificar el mensaje específico del error
           if (error.error && error.error.error === 'You did not borrow this book') {
@@ -154,9 +154,9 @@ export class BorrowedBooksComponent implements OnInit, OnDestroy {
         } else if (error.status === 500) {
           errorMessage = 'Error del servidor. Por favor, inténtalo de nuevo más tarde.';
         }
-        
+
         alert(`Error al retornar "${originalTitle}": ${errorMessage}`);
-        
+
         // Recargar la lista para asegurar que los datos estén actualizados
         this.loadBorrowedBooks();
       }

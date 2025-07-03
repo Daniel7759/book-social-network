@@ -16,7 +16,7 @@ import { PageResponseFeedbackResponse } from '../../services/models/page-respons
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './book-detail.html',
-  styleUrl: './book-detail.css'
+  styleUrl: './book-detail.scss'
 })
 export class BookDetailComponent implements OnInit, OnDestroy {
   book: BookResponse | null = null;
@@ -28,20 +28,20 @@ export class BookDetailComponent implements OnInit, OnDestroy {
   error: string | null = null;
   feedbackError: string | null = null;
   canLeaveFeedback = false;
-  
+
   // Formulario de feedback
   newFeedback: FeedbackRequest = {
     bookId: 0,
     comment: '',
     note: 5
   };
-  
+
   // Paginación de feedbacks
   currentPage = 0;
   pageSize = 10;
   totalPages = 0;
   totalElements = 0;
-  
+
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -59,7 +59,7 @@ export class BookDetailComponent implements OnInit, OnDestroy {
       this.newFeedback.bookId = parseInt(bookId, 10);
       this.loadBook();
       this.loadFeedbacks();
-      
+
       // Verificar si el usuario puede dejar feedback (solo si está autenticado)
       if (this.authService.isAuthenticated) {
         this.checkBorrowStatus();
@@ -119,7 +119,7 @@ export class BookDetailComponent implements OnInit, OnDestroy {
         console.error('Error al cargar feedbacks:', error);
         this.loadingFeedbacks = false;
         this.feedbacks = [];
-        
+
         if (error.status === 401 || error.status === 403) {
           this.feedbackError = 'Necesitas iniciar sesión para ver los comentarios.';
         } else {
@@ -156,22 +156,22 @@ export class BookDetailComponent implements OnInit, OnDestroy {
       next: (feedbackId: number) => {
         console.log('Feedback guardado exitosamente:', feedbackId);
         this.submittingFeedback = false;
-        
+
         // Limpiar formulario
         this.newFeedback.comment = '';
         this.newFeedback.note = 5;
-        
+
         // Recargar feedbacks para mostrar el nuevo
         this.currentPage = 0;
         this.loadFeedbacks();
-        
+
         // Mostrar mensaje de éxito
         alert('¡Comentario guardado exitosamente!');
       },
       error: (error) => {
         console.error('Error al guardar feedback:', error);
         this.submittingFeedback = false;
-        
+
         if (error.status === 400) {
           this.feedbackError = 'Ya has comentado este libro anteriormente.';
         } else if (error.status === 401 || error.status === 403) {
@@ -206,13 +206,13 @@ export class BookDetailComponent implements OnInit, OnDestroy {
       error: (error) => {
         console.error('Error al pedir prestado el libro:', error);
         let errorMessage = 'Error al pedir prestado el libro.';
-        
+
         if (error.status === 400) {
           errorMessage = 'No puedes pedir prestado tu propio libro o el libro no está disponible.';
         } else if (error.status === 403) {
           errorMessage = 'No tienes permisos para realizar esta acción.';
         }
-        
+
         alert(errorMessage);
       }
     });
@@ -233,7 +233,7 @@ export class BookDetailComponent implements OnInit, OnDestroy {
     // Por ahora mostrar un mensaje de confirmación
     // TODO: Implementar servicio de lista de espera
     alert(`"${this.book.title}" se agregará a tu lista de espera cuando esté disponible el servicio.`);
-    
+
     console.log('Agregando a lista de espera:', this.book.title);
   }
 
@@ -250,16 +250,16 @@ export class BookDetailComponent implements OnInit, OnDestroy {
       if (this.book.cover.startsWith('http://') || this.book.cover.startsWith('https://')) {
         return this.book.cover;
       }
-      
+
       // Si ya tiene el prefijo data:image, la devolvemos tal como está
       if (this.book.cover.startsWith('data:image/')) {
         return this.book.cover;
       }
-      
+
       // Si es Base64 sin prefijo, agregamos el prefijo data:image/jpg;base64,
       return 'data:image/jpg;base64,' + this.book.cover;
     }
-    
+
     // Imagen por defecto si no hay portada
     return 'https://via.placeholder.com/400x600/6366f1/ffffff?text=No+Cover';
   }
@@ -299,10 +299,10 @@ export class BookDetailComponent implements OnInit, OnDestroy {
       next: (response) => {
         const borrowedBooks = response.content || [];
         // Verificar si el libro actual está en la lista de libros prestados
-        const hasBorrowedThisBook = borrowedBooks.some(borrowedBook => 
+        const hasBorrowedThisBook = borrowedBooks.some(borrowedBook =>
           borrowedBook.id === this.newFeedback.bookId
         );
-        
+
         this.canLeaveFeedback = hasBorrowedThisBook;
         this.checkingBorrowStatus = false;
       },
