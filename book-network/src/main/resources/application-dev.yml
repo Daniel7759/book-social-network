@@ -33,7 +33,7 @@ application:
     frontend:
       activation-url: ${MAILING_FRONTEND_ACTIVATION_URL}
   cors:
-    origins: http://localhost:4200,http://localhost:8080,
+    origins: http://localhost:4200,http://localhost:8080,https://book-social-ui.vercel.app/
   file:
     upload:
       photos-output-path: ./uploads
