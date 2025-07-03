@@ -1,0 +1,414 @@
+/* Modal de Agregar Libro - Estilos personalizados */
+
+/* Overlay principal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  overflow-y: auto;
+  backdrop-filter: blur(2px);
+}
+
+/* Container del modal */
+.modal-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+  text-align: center;
+}
+
+/* Backdrop/fondo */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  transition: opacity 0.3s ease;
+}
+
+/* Contenido del modal */
+.modal-content {
+  position: relative;
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  text-align: left;
+  max-width: 32rem;
+  width: 100%;
+  margin: 2rem auto;
+  animation: modalSlideIn 0.3s ease-out;
+  overflow: hidden;
+}
+
+/* Dark mode para el contenido del modal */
+@media (prefers-color-scheme: dark) {
+  .modal-content {
+    background-color: rgb(31, 41, 55);
+  }
+}
+
+/* Header del modal */
+.modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+@media (prefers-color-scheme: dark) {
+  .modal-header {
+    border-bottom-color: rgb(75, 85, 99);
+  }
+}
+
+/* Botón de cerrar */
+.modal-close-btn {
+  color: #9ca3af;
+  transition: color 0.2s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+}
+
+.modal-close-btn:hover {
+  color: #6b7280;
+}
+
+@media (prefers-color-scheme: dark) {
+  .modal-close-btn:hover {
+    color: #d1d5db;
+  }
+}
+
+/* Footer del modal */
+.modal-footer {
+  padding: 1rem 1.5rem;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  flex-direction: row-reverse;
+}
+
+/* Botones del modal */
+.modal-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.375rem;
+  border: 1px solid transparent;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px;
+}
+
+.modal-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.modal-button-primary {
+  background-color: #4f46e5;
+  color: white;
+}
+
+.modal-button-primary:hover:not(:disabled) {
+  background-color: #4338ca;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+}
+
+.modal-button-secondary {
+  background-color: white;
+  color: #374151;
+  border-color: #d1d5db;
+}
+
+.modal-button-secondary:hover:not(:disabled) {
+  background-color: #f9fafb;
+  transform: translateY(-1px);
+}
+
+@media (prefers-color-scheme: dark) {
+  .modal-button-secondary {
+    background-color: rgb(31, 41, 55);
+    color: #d1d5db;
+    border-color: rgb(75, 85, 99);
+  }
+  
+  .modal-button-secondary:hover:not(:disabled) {
+    background-color: rgb(55, 65, 81);
+  }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .modal-footer {
+    flex-direction: column;
+  }
+  
+  .modal-button {
+    width: 100%;
+    margin: 0.25rem 0;
+  }
+  
+  .modal-container {
+    padding: 0.5rem;
+  }
+  
+  .modal-content {
+    margin: 1rem auto;
+  }
+}
+
+/* Animación de entrada */
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -50px, 0) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* Form styling */
+.form-input:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-input.error {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* Estilos para elementos del formulario */
+.form-label {
+  cursor: pointer;
+  position: relative;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  color: #4f46e5;
+  transition: color 0.2s ease;
+}
+
+.form-label:hover {
+  color: #4338ca;
+}
+
+@media (prefers-color-scheme: dark) {
+  .form-label {
+    color: #818cf8;
+  }
+  
+  .form-label:hover {
+    color: #a78bfa;
+  }
+}
+
+/* Input fields unified styling */
+.form-input-unified {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  background: white;
+  color: #111827;
+}
+
+.form-input-unified:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  .form-input-unified {
+    background: rgb(55, 65, 81);
+    color: white;
+    border-color: rgb(75, 85, 99);
+  }
+  
+  .form-input-unified:focus {
+    border-color: #818cf8;
+    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.1);
+  }
+}
+
+/* File upload area */
+.upload-area {
+  transition: all 0.2s ease;
+}
+
+.upload-area:hover {
+  border-color: #6366f1;
+  background-color: rgba(99, 102, 241, 0.02);
+}
+
+.upload-area.drag-over {
+  border-color: #6366f1;
+  background-color: rgba(99, 102, 241, 0.05);
+  transform: scale(1.01);
+}
+
+/* Preview image container */
+.preview-container {
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.preview-container:hover {
+  transform: scale(1.02);
+}
+
+.remove-image-btn {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.remove-image-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Loading states */
+.btn-loading {
+  position: relative;
+}
+
+.btn-loading:disabled {
+  cursor: not-allowed;
+}
+
+/* Form validation */
+.field-error {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Success states */
+.form-success {
+  animation: slideInFromBottom 0.4s ease-out;
+}
+
+@keyframes slideInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Dark mode improvements */
+@media (prefers-color-scheme: dark) {
+  .upload-area:hover {
+    background-color: rgba(99, 102, 241, 0.05);
+  }
+  
+  .upload-area.drag-over {
+    background-color: rgba(99, 102, 241, 0.08);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .modal-container {
+    margin: 1rem;
+    max-width: calc(100vw - 2rem);
+  }
+  
+  .form-buttons {
+    flex-direction: column-reverse;
+  }
+  
+  .form-buttons button {
+    width: 100%;
+    margin: 0.25rem 0;
+  }
+}
+
+/* File input custom styling */
+input[type="file"] {
+  clip: rect(0, 0, 0, 0);
+  position: absolute;
+  pointer-events: none;
+}
+
+.file-input-label {
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.file-input-label:hover {
+  color: #4f46e5;
+}
+
+/* Checkbox custom styling */
+input[type="checkbox"] {
+  accent-color: #6366f1;
+}
+
+/* Text area styling */
+textarea {
+  resize: vertical;
+  min-height: 80px;
+  max-height: 200px;
+}
+
+/* Focus states */
+.form-element:focus-within {
+  transform: translateY(-1px);
+}
+
+/* Forzar fondo transparente en todos los elementos del formulario */
+.modal-content input,
+.modal-content textarea,
+.modal-content label {
+  background-color: transparent !important;
+}
+
+/* Dark mode - forzar transparencia */
+@media (prefers-color-scheme: dark) {
+  .modal-content input,
+  .modal-content textarea,
+  .modal-content label {
+    background-color: transparent !important;
+  }
+}
+
+/* Error message styling */
+.error-message {
+  animation: slideInFromTop 0.3s ease-out;
+}
+
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,150 @@
+<div class="home-container bg-gray-50 dark:bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+        Biblioteca de Libros
+      </h1>
+      <p class="text-gray-600 dark:text-gray-300">
+        <!-- Mensaje diferente basado en el estado de autenticación -->
+        <ng-container *ngIf="isAuthenticated()">
+          Gestiona y descubre libros increíbles en tu biblioteca personal
+        </ng-container>
+        <ng-container *ngIf="!isAuthenticated() && isAuthStateInitialized">
+          Descubre libros increíbles. <a routerLink="/login" class="text-blue-600 hover:text-blue-800 underline">Inicia sesión</a> para gestionar tu biblioteca
+        </ng-container>
+        <ng-container *ngIf="!isAuthStateInitialized">
+          Cargando biblioteca...
+        </ng-container>
+      </p>
+    </div>
+
+    <!-- Loading inicial (mientras se determina el estado de autenticación) -->
+    <div *ngIf="!isAuthStateInitialized" class="flex justify-center items-center py-12">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 loading-spinner"></div>
+      <span class="ml-3 text-gray-600 dark:text-gray-300">Inicializando...</span>
+    </div>
+
+    <!-- Contenido cuando el estado de autenticación ya está determinado -->
+    <ng-container *ngIf="isAuthStateInitialized">
+      <!-- Loading de datos -->
+      <div *ngIf="loading" class="flex justify-center items-center py-12">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 loading-spinner"></div>
+        <span class="ml-3 text-gray-600 dark:text-gray-300">
+          <ng-container *ngIf="isAuthenticated()">Cargando tus libros...</ng-container>
+          <ng-container *ngIf="!isAuthenticated()">Cargando libros...</ng-container>
+        </span>
+      </div>
+
+      <!-- Error -->
+      <div *ngIf="error" class="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-md p-4 mb-6">
+        <div class="flex items-center">
+          <svg class="h-5 w-5 text-red-400 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+          </svg>
+          <p class="text-sm text-red-700 dark:text-red-300">
+            {{ error }}
+          </p>
+        </div>
+        <button 
+          (click)="loadBooks()"
+          class="mt-3 bg-red-100 hover:bg-red-200 dark:bg-red-800 dark:hover:bg-red-700 text-red-800 dark:text-red-200 px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200">
+          Reintentar
+        </button>
+      </div>
+
+      <!-- Books Grid - PRIMERO: Usuario autenticado -->
+      <div *ngIf="!loading && !error && isAuthenticated()" class="books-grid">
+        <div *ngFor="let book of books" class="book-card-container">
+          <app-book-card 
+            [book]="book"
+            [showActions]="true"
+            (onBorrow)="onBorrowBook($event)"
+            (onViewDetails)="onViewBookDetails($event)"
+            (onAddToWaitlist)="onAddToWaitlist($event)">
+          </app-book-card>
+        </div>
+      </div>
+
+      <!-- Books Grid - SEGUNDO: Usuario no autenticado -->
+      <div *ngIf="!loading && !error && !isAuthenticated()" class="books-grid">
+        <div *ngFor="let book of books" class="book-card-container">
+          <app-book-card 
+            [book]="book"
+            [showActions]="false"
+            (onBorrow)="onBorrowBook($event)"
+            (onViewDetails)="onViewBookDetails($event)"
+            (onAddToWaitlist)="onAddToWaitlist($event)">
+          </app-book-card>
+        </div>
+      </div>
+
+      <!-- Empty State - Usuario autenticado -->
+      <div *ngIf="!loading && !error && isAuthenticated() && books.length === 0" class="text-center py-12">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">No hay libros disponibles para ti</h3>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          Aún no hay libros disponibles que puedas pedir prestado. ¡Vuelve pronto!
+        </p>
+        <div class="mt-6">
+          <a routerLink="/my-books" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+            <svg class="mr-2 -ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
+            Agregar tu primer libro
+          </a>
+        </div>
+      </div>
+
+      <!-- Empty State - Usuario no autenticado -->
+      <div *ngIf="!loading && !error && !isAuthenticated() && books.length === 0" class="text-center py-12">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">No hay libros disponibles</h3>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          Aún no hay libros en la biblioteca.
+        </p>
+        <div class="mt-6 space-x-3">
+          <a routerLink="/login" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+            Iniciar Sesión
+          </a>
+          <a routerLink="/register" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+            Registrarse
+          </a>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div *ngIf="!loading && !error && totalPages > 1" class="mt-8 flex justify-center">
+        <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+          <button 
+            (click)="goToPage(currentPage - 1)"
+            [disabled]="currentPage === 0"
+            class="pagination-button relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none">
+            <span class="sr-only">Previous</span>
+            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+          </button>
+          
+          <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-300">
+            Página {{ currentPage + 1 }} de {{ totalPages }}
+          </span>
+          
+          <button 
+            (click)="goToPage(currentPage + 1)"
+            [disabled]="currentPage >= totalPages - 1"
+            class="pagination-button relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none">
+            <span class="sr-only">Next</span>
+            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </nav>
+      </div>
+    </ng-container>
+  </div>
+</div>

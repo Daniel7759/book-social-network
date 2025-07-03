@@ -1,0 +1,266 @@
+/* Estilos para el modal de edición de libro */
+
+/* Animaciones para el modal */
+.modal-enter {
+  animation: modalEnter 0.3s ease-out forwards;
+}
+
+.modal-leave {
+  animation: modalLeave 0.2s ease-in forwards;
+}
+
+@keyframes modalEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes modalLeave {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+}
+
+/* Overlay transition */
+.overlay-enter {
+  animation: overlayEnter 0.3s ease-out forwards;
+}
+
+.overlay-leave {
+  animation: overlayLeave 0.2s ease-in forwards;
+}
+
+@keyframes overlayEnter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes overlayLeave {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Hover effects para el input de archivo */
+label[for="file-input"]:hover {
+  background-color: #f9fafb;
+  border-color: #6366f1;
+  transition: all 0.2s ease;
+}
+
+/* Efectos para la imagen de preview */
+.preview-image {
+  transition: all 0.3s ease;
+}
+
+.preview-image:hover {
+  transform: scale(1.02);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Loading state para la imagen */
+.image-loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.image-loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: loading-shimmer 1.5s infinite;
+}
+
+@keyframes loading-shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Button animations */
+.btn-upload {
+  transition: all 0.2s ease;
+}
+
+.btn-upload:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.btn-upload:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* File input custom styling */
+.file-input-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.file-input-wrapper input[type=file] {
+  position: absolute;
+  left: -9999px;
+}
+
+/* Drag and drop area */
+.drop-zone {
+  border: 2px dashed #d1d5db;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.drop-zone:hover {
+  border-color: #6366f1;
+  background-color: #f8fafc;
+}
+
+.drop-zone.dragover {
+  border-color: #6366f1;
+  background-color: #eef2ff;
+  transform: scale(1.02);
+}
+
+/* Success/Error states */
+.success-state {
+  animation: successPulse 0.6s ease-in-out;
+}
+
+.error-state {
+  animation: errorShake 0.6s ease-in-out;
+}
+
+@keyframes successPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes errorShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .drop-zone {
+    border-color: #374151;
+    background-color: #1f2937;
+  }
+  
+  .drop-zone:hover {
+    border-color: #6366f1;
+    background-color: #111827;
+  }
+  
+  .drop-zone.dragover {
+    background-color: #1e1b4b;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+  .modal-content {
+    margin: 1rem;
+    max-width: calc(100vw - 2rem);
+  }
+  
+  .preview-image {
+    width: 100px;
+    height: 140px;
+  }
+  
+  .file-input-wrapper {
+    width: 100%;
+  }
+}
+
+/* Progress bar for upload */
+.upload-progress {
+  height: 4px;
+  background-color: #e5e7eb;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.upload-progress-bar {
+  height: 100%;
+  background-color: #6366f1;
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
+
+/* Tooltip styles */
+.tooltip {
+  position: relative;
+}
+
+.tooltip:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #1f2937;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  z-index: 10;
+  margin-bottom: 0.25rem;
+}
+
+.tooltip:hover::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: #1f2937;
+  z-index: 10;
+}

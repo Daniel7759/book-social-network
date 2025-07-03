@@ -1,0 +1,149 @@
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
+  <!-- Imagen de portada -->
+  <div class="relative h-64 overflow-hidden">
+    <img 
+      [src]="getBookCover()" 
+      [alt]="book.title"
+      (load)="onImageLoad($event)"
+      (error)="onImageError($event)"
+      class="w-full h-full book-cover-image transition-transform duration-300 hover:scale-105"
+      loading="lazy">
+    
+    <!-- Badge de disponibilidad -->
+    <div class="absolute top-2 right-2">
+      <span 
+        [class]="isAvailable() 
+          ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' 
+          : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'"
+        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium">
+        <span 
+          [class]="isAvailable() ? 'bg-green-400' : 'bg-red-400'"
+          class="w-2 h-2 mr-1 rounded-full"></span>
+        {{ isAvailable() ? 'Disponible' : 'No disponible' }}
+      </span>
+    </div>
+
+    <!-- Badge de calificación -->
+    <div *ngIf="book.rate && book.rate > 0" class="absolute top-2 left-2">
+      <div class="bg-black bg-opacity-70 text-white px-2 py-1 rounded-md text-sm flex items-center">
+        <svg class="w-4 h-4 text-yellow-400 mr-1" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+        </svg>
+        {{ getRatingText() }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenido de la card -->
+  <div class="p-4">
+    <!-- Título -->
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2 min-h-[3.5rem]">
+      {{ book.title || 'Título no disponible' }}
+    </h3>
+
+    <!-- Autor -->
+    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+      <span class="font-medium">Por:</span> {{ book.authorName || 'Autor desconocido' }}
+    </p>
+
+    <!-- ISBN -->
+    <p *ngIf="book.isbn" class="text-xs text-gray-500 dark:text-gray-500 mb-3">
+      <span class="font-medium">ISBN:</span> {{ book.isbn }}
+    </p>
+
+    <!-- Sinopsis -->
+    <p *ngIf="book.synopsis" class="text-sm text-gray-700 dark:text-gray-300 mb-4 line-clamp-3">
+      {{ truncateText(book.synopsis, 120) }}
+    </p>
+
+    <!-- Propietario -->
+    <div class="flex items-center text-xs text-gray-500 dark:text-gray-500 mb-4">
+      <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+      </svg>
+      <span>Propietario: {{ book.owner || 'Desconocido' }}</span>
+    </div>
+
+    <!-- Calificación con estrellas -->
+    <div class="flex items-center mb-4">
+      <div class="flex items-center">
+        <span *ngFor="let filled of getStars()" 
+              [class]="filled ? 'text-yellow-400' : 'text-gray-300 dark:text-gray-600'"
+              class="w-4 h-4">
+          <svg fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+          </svg>
+        </span>
+      </div>
+      <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">
+        ({{ getRatingText() }})
+      </span>
+    </div>
+
+    <!-- Acciones -->
+    <div *ngIf="showActions" class="flex space-x-2">
+      <!-- Acciones para el propietario del libro -->
+      <ng-container *ngIf="isOwner">
+        <!-- Botón Editar -->
+        <button 
+          (click)="editBook()"
+          class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+          </svg>
+          Editar
+        </button>
+
+        <!-- Botón Archivar/Desarchivar -->
+        <button 
+          (click)="toggleArchive()"
+          [class]="book.archived 
+            ? 'bg-green-600 hover:bg-green-700 text-white' 
+            : 'bg-orange-600 hover:bg-orange-700 text-white'"
+          class="flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500">
+          <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path *ngIf="!book.archived" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8l4-4m0 0l4 4m-4-4v12"/>
+            <path *ngIf="book.archived" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-4 4m0 0l-4-4m4 4V8"/>
+          </svg>
+          {{ book.archived ? 'Desarchivar' : 'Archivar' }}
+        </button>
+      </ng-container>
+
+      <!-- Acciones para otros usuarios -->
+      <ng-container *ngIf="!isOwner">
+        <!-- Botón Ver Detalles -->
+        <button 
+          (click)="viewDetails()"
+          class="flex-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500">
+          <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+          </svg>
+          Ver
+        </button>
+
+        <!-- Botón Pedir Prestado -->
+        <button 
+          *ngIf="isAvailable()"
+          (click)="borrowBook()"
+          class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+          </svg>
+          Pedir
+        </button>
+
+        <!-- Botón Agregar a Lista de Espera -->
+        <button 
+          *ngIf="!isAvailable()"
+          (click)="addToWaitlist()"
+          class="flex-1 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500">
+          <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+          </svg>
+          Esperar
+        </button>
+      </ng-container>
+    </div>
+  </div>
+</div>

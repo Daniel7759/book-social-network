@@ -1,0 +1,88 @@
+/* Estilos adicionales para el componente de registro */
+
+.register-container {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Animación para el formulario */
+form {
+  animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Estilos para los campos de entrada con focus */
+input:focus {
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+  transition: all 0.2s ease-in-out;
+}
+
+/* Animación para el botón */
+button {
+  transition: all 0.2s ease-in-out;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Estilo para mensajes de error y éxito */
+.error-message,
+.success-message {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Grid responsive para nombre y apellido */
+.grid-cols-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+  
+  .register-container {
+    padding: 1rem;
+  }
+}
+
+/* Estilos para enlaces */
+a {
+  transition: color 0.2s ease-in-out;
+}
+
+/* Spinner personalizado */
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

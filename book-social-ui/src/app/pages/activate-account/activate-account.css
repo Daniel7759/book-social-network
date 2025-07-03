@@ -1,0 +1,82 @@
+/* Estilos adicionales para el componente de activación de cuenta */
+
+/* Animación para el formulario */
+form {
+  animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Estilos especiales para el campo del código */
+input[name="token"] {
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+input[name="token"]:focus {
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+  transition: all 0.2s ease-in-out;
+}
+
+/* Animación para el botón */
+button {
+  transition: all 0.2s ease-in-out;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Estilo para mensajes de éxito */
+.success-message {
+  animation: fadeIn 0.5s ease-in;
+}
+
+/* Estilo para mensajes de error */
+.error-message {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Spinner personalizado */
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+  .activation-container {
+    padding: 1rem;
+  }
+  
+  input[name="token"] {
+    font-size: 1rem;
+  }
+}

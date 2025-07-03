@@ -1,0 +1,234 @@
+<nav class="bg-white border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700 shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16">
+      <!-- Logo y navegación principal -->
+      <div class="flex">
+        <!-- Logo -->
+        <div class="flex-shrink-0 flex items-center">
+          <a routerLink="/home" class="flex items-center space-x-2">
+            <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+              <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <span class="text-2xl font-bold text-gray-900 dark:text-white">BSN</span>
+          </a>
+        </div>
+
+        <!-- Navegación principal (desktop) -->
+        <div class="hidden md:ml-6 md:flex md:space-x-8">
+          <!-- Inicio - siempre accesible -->
+          <a routerLink="/home" 
+             routerLinkActive="border-blue-500 text-gray-900 dark:text-white" 
+             [routerLinkActiveOptions]="{exact: false}"
+             class="border-transparent text-gray-500 dark:text-gray-300 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200">
+            Inicio
+          </a>
+          
+          <!-- Mis Libros - requiere autenticación pero se ve igual -->
+          <a (click)="navigateWithAuth('/my-books')" 
+             routerLinkActive="border-blue-500 text-gray-900 dark:text-white" 
+             class="border-transparent text-gray-500 dark:text-gray-300 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200 cursor-pointer">
+            Mis Libros
+          </a>
+          
+          <!-- Mi Lista de Espera - requiere autenticación pero se ve igual -->
+          <a (click)="navigateWithAuth('/my-waiting-list')" 
+             routerLinkActive="border-blue-500 text-gray-900 dark:text-white" 
+             class="border-transparent text-gray-500 dark:text-gray-300 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200 cursor-pointer">
+            Mi Lista de Espera
+          </a>
+          
+          <!-- Libros Retornados - requiere autenticación pero se ve igual -->
+          <a (click)="navigateWithAuth('/returned-books')" 
+             routerLinkActive="border-blue-500 text-gray-900 dark:text-white" 
+             class="border-transparent text-gray-500 dark:text-gray-300 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200 cursor-pointer">
+            Libros Retornados
+          </a>
+          
+          <!-- Libros Prestados - requiere autenticación pero se ve igual -->
+          <a (click)="navigateWithAuth('/borrowed-books')" 
+             routerLinkActive="border-blue-500 text-gray-900 dark:text-white" 
+             class="border-transparent text-gray-500 dark:text-gray-300 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200 cursor-pointer">
+            Libros Prestados
+          </a>
+        </div>
+      </div>
+
+      <!-- Menú de usuario o botones de auth -->
+      <div class="hidden md:ml-6 md:flex md:items-center">
+        <!-- Botones de autenticación (cuando NO está autenticado) -->
+        <div *ngIf="!isAuthenticated" class="flex items-center space-x-4">
+          <a routerLink="/login" 
+             class="text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">
+            Iniciar Sesión
+          </a>
+          <a routerLink="/register" 
+             class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 shadow-sm">
+            Registrarse
+          </a>
+        </div>
+
+        <!-- Dropdown de usuario (cuando SÍ está autenticado) -->
+        <div *ngIf="isAuthenticated" class="ml-3 relative">
+          <div>
+            <button type="button" 
+                    class="bg-white dark:bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 hover:ring-2 hover:ring-blue-300" 
+                    id="user-menu-button" 
+                    aria-expanded="false" 
+                    aria-haspopup="true"
+                    (click)="toggleUserMenu()"
+                    #userMenuButton>
+              <span class="sr-only">Abrir menú de usuario</span>
+              <div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-medium">
+                {{ getUserInitials() }}
+              </div>
+            </button>
+          </div>
+
+          <!-- Dropdown menú -->
+          <div *ngIf="showUserMenu" 
+               class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
+               role="menu" 
+               aria-orientation="vertical" 
+               aria-labelledby="user-menu-button">
+            <div class="py-1" role="none">
+              <div class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-600">
+                <p class="text-xs text-gray-500 dark:text-gray-400">Conectado como:</p>
+                <p class="font-medium">{{ userName }}</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 truncate">{{ userEmail }}</p>
+              </div>
+              <a href="#" class="text-gray-700 dark:text-gray-300 block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200" role="menuitem">
+                <div class="flex items-center">
+                  <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                  </svg>
+                  Mi Perfil
+                </div>
+              </a>
+              <a href="#" class="text-gray-700 dark:text-gray-300 block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200" role="menuitem">
+                <div class="flex items-center">
+                  <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  </svg>
+                  Configuración
+                </div>
+              </a>
+              <button (click)="logout()" 
+                      class="text-gray-700 dark:text-gray-300 block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200" 
+                      role="menuitem">
+                <div class="flex items-center">
+                  <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                  </svg>
+                  Cerrar Sesión
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Menú móvil hamburguesa -->
+      <div class="md:hidden flex items-center">
+        <button type="button" 
+                class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors duration-200" 
+                aria-controls="mobile-menu" 
+                aria-expanded="false"
+                (click)="toggleMobileMenu()">
+          <span class="sr-only">Abrir menú principal</span>
+          <svg *ngIf="!showMobileMenu" class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg *ngIf="showMobileMenu" class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menú móvil -->
+  <div class="md:hidden" *ngIf="showMobileMenu" id="mobile-menu">
+    <!-- Navegación móvil -->
+    <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-gray-50 dark:bg-gray-800">
+      <!-- Inicio - siempre accesible -->
+      <a routerLink="/home" 
+         routerLinkActive="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300" 
+         class="text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200">
+        Inicio
+      </a>
+      
+      <!-- Mis Libros - requiere autenticación pero se ve igual -->
+      <a (click)="navigateWithAuth('/my-books')" 
+         routerLinkActive="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300" 
+         class="text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 cursor-pointer">
+        Mis Libros
+      </a>
+      
+      <!-- Mi Lista de Espera - requiere autenticación pero se ve igual -->
+      <a (click)="navigateWithAuth('/my-waiting-list')" 
+         routerLinkActive="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300" 
+         class="text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 cursor-pointer">
+        Mi Lista de Espera
+      </a>
+      
+      <!-- Libros Retornados - requiere autenticación pero se ve igual -->
+      <a (click)="navigateWithAuth('/returned-books')" 
+         routerLinkActive="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300" 
+         class="text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 cursor-pointer">
+        Libros Retornados
+      </a>
+      
+      <!-- Libros Prestados - requiere autenticación pero se ve igual -->
+      <a (click)="navigateWithAuth('/borrowed-books')" 
+         routerLinkActive="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300" 
+         class="text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 cursor-pointer">
+        Libros Prestados
+      </a>
+    </div>
+
+    <!-- Sección de usuario móvil -->
+    <ng-container *ngIf="isAuthenticated">
+      <div class="pt-4 pb-3 border-t border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800">
+        <div class="flex items-center px-5">
+          <div class="flex-shrink-0">
+            <div class="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium">
+              {{ getUserInitials() }}
+            </div>
+          </div>
+          <div class="ml-3">
+            <div class="text-base font-medium text-gray-800 dark:text-white">{{ userName }}</div>
+            <div class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ userEmail }}</div>
+          </div>
+        </div>
+        <div class="mt-3 px-2 space-y-1">
+          <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
+            Mi Perfil
+          </a>
+          <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
+            Configuración
+          </a>
+          <button (click)="logout()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
+            Cerrar Sesión
+          </button>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Sección de login/registro para usuarios no autenticados -->
+    <ng-container *ngIf="!isAuthenticated">
+      <div class="pt-4 pb-3 border-t border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800">
+        <div class="px-2 space-y-1">
+          <a routerLink="/login" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
+            Iniciar Sesión
+          </a>
+          <a routerLink="/register" class="block px-3 py-2 rounded-md text-base font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200">
+            Registrarse
+          </a>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</nav>

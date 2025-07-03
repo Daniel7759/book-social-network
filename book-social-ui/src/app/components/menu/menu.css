@@ -1,0 +1,146 @@
+/* Estilos adicionales para el menú */
+
+/* Transiciones suaves para todos los elementos interactivos */
+.transition-colors {
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+/* Efecto hover mejorado para los enlaces de navegación */
+nav a {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Estilo para el logo */
+.logo-container {
+  transition: transform 0.2s ease-in-out;
+}
+
+.logo-container:hover {
+  transform: scale(1.05);
+}
+
+/* Animación para el dropdown */
+.dropdown-menu {
+  animation: slideDown 0.2s ease-out;
+  transform-origin: top;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: scaleY(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+  }
+}
+
+/* Animación para el menú móvil */
+.mobile-menu {
+  animation: slideDown 0.3s ease-out;
+}
+
+/* Efecto de focus mejorado */
+button:focus,
+a:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+/* Avatar del usuario */
+.user-avatar {
+  transition: all 0.2s ease-in-out;
+}
+
+.user-avatar:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* Indicador activo para navegación */
+.active-nav-item {
+  position: relative;
+}
+
+.active-nav-item::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #3b82f6;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .mobile-menu {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Dark mode enhancements */
+@media (prefers-color-scheme: dark) {
+  .dropdown-menu {
+    box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Estilos para elementos bloqueados */
+.menu-item-locked {
+  position: relative;
+  transition: all 0.2s ease-in-out;
+}
+
+.menu-item-locked:hover {
+  transform: translateY(-1px);
+}
+
+.menu-item-locked.opacity-50 {
+  opacity: 0.6;
+}
+
+.menu-item-locked.opacity-50:hover {
+  opacity: 0.8;
+}
+
+/* Indicador de candado */
+.lock-indicator {
+  font-size: 0.75rem;
+  margin-left: 0.25rem;
+  opacity: 0.8;
+}
+
+/* Animación para el dropdown del usuario */
+.user-dropdown {
+  animation: fadeInDown 0.15s ease-out;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -10px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Mejoras para el menú móvil */
+.mobile-menu {
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

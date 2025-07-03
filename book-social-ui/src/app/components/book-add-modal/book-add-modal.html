@@ -1,0 +1,205 @@
+<!-- Modal de Agregar Libro -->
+<div *ngIf="isOpen" class="modal-overlay" (click)="onOverlayClick($event)">
+  <div class="modal-container">
+    <!-- Overlay -->
+    <div class="modal-backdrop"></div>
+
+    <!-- Modal Content -->
+    <div class="modal-content">
+      <!-- Header -->
+      <div class="modal-header">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
+            Agregar Nuevo Libro
+          </h3>
+          <button 
+            (click)="closeModal()"
+            class="modal-close-btn">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Error Message -->
+        <div *ngIf="error" class="mb-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-md p-3">
+          <div class="flex">
+            <svg class="h-5 w-5 text-red-400 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+            </svg>
+            <p class="text-sm text-red-700 dark:text-red-200">{{ error }}</p>
+          </div>
+        </div>
+
+        <!-- Formulario -->
+        <form (ngSubmit)="saveBook()" #bookForm="ngForm" class="space-y-4">
+          <!-- Título -->
+          <div>
+            <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Título *
+            </label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              [(ngModel)]="bookData.tittle"
+              required
+              minlength="2"
+              class="form-input-unified"
+              placeholder="Ingresa el título del libro"
+              [class.border-red-500]="titleError"
+              #titleInput="ngModel">
+            <div *ngIf="titleError" class="mt-1 text-sm text-red-600 dark:text-red-400">
+              {{ titleError }}
+            </div>
+          </div>
+
+          <!-- Autor -->
+          <div>
+            <label for="author" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Autor *
+            </label>
+            <input
+              type="text"
+              id="author"
+              name="author"
+              [(ngModel)]="bookData.authorName"
+              required
+              minlength="2"
+              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:text-white"
+              placeholder="Ingresa el nombre del autor"
+              [class.border-red-500]="authorError"
+              #authorInput="ngModel">
+            <div *ngIf="authorError" class="mt-1 text-sm text-red-600 dark:text-red-400">
+              {{ authorError }}
+            </div>
+          </div>
+
+          <!-- ISBN -->
+          <div>
+            <label for="isbn" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              ISBN <span class="text-gray-500">(opcional)</span>
+            </label>
+            <input
+              type="text"
+              id="isbn"
+              name="isbn"
+              [(ngModel)]="bookData.isbn"
+              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:text-white"
+              placeholder="Ej: 978-3-16-148410-0"
+              [class.border-red-500]="isbnError"
+              #isbnInput="ngModel">
+            <div *ngIf="isbnError" class="mt-1 text-sm text-red-600 dark:text-red-400">
+              {{ isbnError }}
+            </div>
+          </div>
+
+          <!-- Sinopsis -->
+          <div>
+            <label for="synopsis" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Sinopsis <span class="text-gray-500">(opcional)</span>
+            </label>
+            <textarea
+              id="synopsis"
+              name="synopsis"
+              [(ngModel)]="bookData.synopsis"
+              rows="3"
+              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:text-white resize-none"
+              placeholder="Describe brevemente de qué trata el libro">
+            </textarea>
+          </div>
+
+          <!-- Compartible -->
+          <div class="flex items-center">
+            <input
+              type="checkbox"
+              id="shareable"
+              name="shareable"
+              [(ngModel)]="bookData.shareable"
+              class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+            <label for="shareable" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+              Disponible para préstamo
+            </label>
+          </div>
+
+          <!-- Portada -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Portada del libro <span class="text-gray-500">(opcional)</span>
+            </label>
+            
+            <div class="space-y-3">
+              <!-- Área de upload -->
+              <div class="flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-md hover:border-indigo-400 transition-colors">
+                <div class="space-y-1 text-center">
+                  <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <div class="flex text-sm text-gray-600 dark:text-gray-400">
+                    <label for="file-upload" class="relative cursor-pointer rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none">
+                      <span>Subir archivo</span>
+                      <input 
+                        id="file-upload" 
+                        name="file-upload" 
+                        type="file" 
+                        class="sr-only" 
+                        accept="image/*"
+                        (change)="onFileSelected($event)">
+                    </label>
+                    <p class="pl-1">o arrastra aquí</p>
+                  </div>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">
+                    PNG, JPG, JPEG hasta 5MB
+                  </p>
+                </div>
+              </div>
+
+              <!-- Preview -->
+              <div *ngIf="previewUrl" class="relative">
+                <div class="aspect-[3/4] w-32 mx-auto">
+                  <img 
+                    [src]="previewUrl" 
+                    alt="Preview" 
+                    class="w-full h-full object-cover rounded-lg shadow-md">
+                  <button 
+                    type="button"
+                    (click)="removeImage()"
+                    class="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                  </button>
+                </div>
+                <p class="text-center text-sm text-gray-500 dark:text-gray-400 mt-2">
+                  {{ selectedFile?.name }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button 
+          type="button"
+          (click)="saveBook()"
+          [disabled]="loading"
+          class="modal-button modal-button-primary">
+          <svg *ngIf="loading" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          {{ loading ? 'Guardando...' : 'Agregar Libro' }}
+        </button>
+        <button 
+          type="button"
+          (click)="closeModal()"
+          [disabled]="loading"
+          class="modal-button modal-button-secondary">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
