@@ -211,7 +211,7 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.feedback-header {
+/*.feedback-header {
   @apply flex items-center justify-between mb-3;
 }
 
@@ -237,14 +237,14 @@
 
 .feedback-comment {
   @apply text-gray-700 dark:text-gray-300 leading-relaxed;
-}
+}*/
 
 /* Paginación */
-.pagination {
+/*.pagination {
   @apply flex items-center justify-center space-x-2 mt-8;
-}
+}*/
 
-.pagination-button {
+/*.pagination-button {
   @apply px-3 py-2 text-sm font-medium text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200;
 }
 
@@ -254,16 +254,16 @@
 
 .pagination-button:disabled {
   @apply opacity-50 cursor-not-allowed;
-}
+}*/
 
 /* Estados de carga */
-.loading-spinner {
+/*.loading-spinner {
   @apply animate-spin rounded-full border-b-2 border-indigo-600;
 }
 
 .loading-text {
   @apply text-gray-600 dark:text-gray-300 ml-3;
-}
+}*/
 
 /* Animaciones personalizadas */
 @keyframes fadeIn {
@@ -297,26 +297,26 @@
 }
 
 /* Responsive improvements */
-@media (max-width: 768px) {
+/*@media (max-width: 768px) {
   .book-detail-container {
     @apply px-4;
   }
-  
+
   .book-detail-grid {
     @apply grid-cols-1 gap-6;
   }
-  
+
   .feedback-form {
     @apply p-4;
   }
-  
+
   .action-button {
     @apply text-sm px-4 py-2;
   }
-}
+}*/
 
 /* Estados de error */
-.error-message {
+/*.error-message {
   @apply bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-md p-4 mb-4;
 }
 
@@ -326,10 +326,10 @@
 
 .error-message .error-text {
   @apply text-sm text-red-700 dark:text-red-300;
-}
+}*/
 
 /* Estados de éxito */
-.success-message {
+/*.success-message {
   @apply bg-green-50 dark:bg-green-900 border border-green-200 dark:border-green-700 rounded-md p-4 mb-4;
 }
 
@@ -339,12 +339,12 @@
 
 .success-message .success-text {
   @apply text-sm text-green-700 dark:text-green-300;
-}
+}*/
 
 /* Mejoras de accesibilidad */
-.sr-only {
+/*.sr-only {
   @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
-}
+}*/
 
 /* Focus styles mejorados */
 *:focus {
@@ -352,6 +352,6 @@
   outline-offset: 2px;
 }
 
-.focus-visible:focus {
+/*.focus-visible:focus {
   @apply ring-2 ring-offset-2 ring-indigo-500;
-}
+}*/
