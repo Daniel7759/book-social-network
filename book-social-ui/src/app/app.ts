@@ -11,7 +11,7 @@ import { filter } from 'rxjs/operators';
   selector: 'app-root',
   imports: [RouterOutlet, Menu, Footer, CommonModule],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.scss'
 })
 export class App implements OnInit{
   protected title = 'book-social-ui';
