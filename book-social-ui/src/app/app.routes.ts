@@ -47,5 +47,10 @@ export const routes: Routes = [
     path: 'borrowed-books',
     loadComponent: () => import('./pages/borrowed-books/borrowed-books').then(m => m.BorrowedBooksComponent),
     canActivate: [authGuard]
+  },
+  {
+    path: '**',
+    redirectTo: '/home',
+    pathMatch: 'full'
   }
 ];
